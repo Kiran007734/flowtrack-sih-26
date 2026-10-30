@@ -1,0 +1,56 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+
+# Node/Vite
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
+
+# Private/runtime data (the placeholder is intentionally retained)
+storage/*
+!storage/.gitkeep
+private-storage/
+uploads/
+runtime-logs/
+*.log
+
+# Local database/cache artifacts and exports
+*.sql
+*.dump
+*.sqlite
+*.sqlite3
+*.db
+postgres-data/
+redis-data/
+exports/
+
+# Local model files and editor/OS state
+models/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

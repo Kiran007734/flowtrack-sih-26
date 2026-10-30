@@ -1,0 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
+import { api } from "@/api/client";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+
+export function PendencyDashboardPage() {
+  const query = useQuery({ queryKey: ["pendency-dashboard"], queryFn: api.pendencyDashboard });
+  if (query.isLoading) return <Card>Loading operational dashboard…</Card>;
+  if (query.isError || !query.data) return <Alert><div>Unable to load dashboard.<Button className="ml-2" variant="outline" onClick={() => void query.refetch()}>Retry</Button></div></Alert>;
+  const data = query.data;
+  const cards = [["Active cases", data.total_active], ["Overdue synthetic deadlines", data.overdue], ["Unassigned scrutiny", data.unassigned], ["EVC pending", data.evc_pending], ["Open compliance", data.compliance_open], ["Expiring documents", data.expiring_documents]];
+  return <div className="space-y-6"><div><h1 className="page-title">Pendency intelligence</h1><p className="page-description">Scoped operational metrics. Ageing is elapsed days since the last recorded workflow action; deadlines are synthetic configuration.</p><p className="mt-1 text-xs text-muted">Data timestamp: {new Date(data.generated_at).toLocaleString()}</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{cards.map(([label, value]) => <Card key={String(label)}><p className="text-sm text-muted">{label}</p><p className="mt-1 text-2xl font-semibold">{value}</p></Card>)}</div><div className="grid gap-6 lg:grid-cols-2"><Card><h2 className="font-semibold">Cases by stage</h2><div className="mt-3 space-y-2">{Object.entries(data.by_stage).map(([stage, count]) => <div key={stage} className="flex justify-between text-sm"><span>{stage}</span><span className="font-medium">{count}</span></div>)}</div></Card><Card><h2 className="font-semibold">Ageing buckets</h2><div className="mt-3 space-y-2">{Object.entries(data.ageing).map(([bucket, count]) => <div key={bucket} className="flex justify-between text-sm"><span>{bucket}</span><span className="font-medium">{count}</span></div>)}</div></Card></div><Card><h2 className="font-semibold">Drill-down cases</h2><div className="mt-3 overflow-x-auto"><table className="min-w-full text-sm"><thead><tr className="text-left text-muted"><th className="p-2">Case</th><th className="p-2">Stage</th><th className="p-2">Ageing</th><th className="p-2" /></tr></thead><tbody>{data.cases.map((item) => <tr key={item.id} className="border-t"><td className="p-2">{item.reference_number}<br /><span className="text-xs text-muted">{item.title}</span></td><td className="p-2">{item.stage}</td><td className="p-2">{item.ageing_days} days</td><td className="p-2"><Link className="text-primary hover:underline" to={`/applications/${item.id}`}>Open</Link></td></tr>)}</tbody></table>{data.cases.length === 0 ? <p className="p-2 text-sm text-muted">No authorized cases match this dashboard scope.</p> : null}</div></Card></div>;
+}

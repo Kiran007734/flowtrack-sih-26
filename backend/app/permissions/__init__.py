@@ -1,0 +1,1 @@
+"""Centralized backend authorization policy."""

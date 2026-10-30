@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aicte-flowtrack-api"
+version = "0.1.0"
+description = "AICTE FlowTrack prototype API"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "alembic==1.15.2",
+  "celery==5.5.1",
+  "email-validator==2.2.0",
+  "fastapi==0.115.12",
+  "httpx==0.28.1",
+  "pwdlib[argon2]==0.3.0",
+  "psycopg[binary]==3.2.6",
+  "pydantic==2.11.3",
+  "pydantic-settings==2.8.1",
+  "PyJWT==2.10.1",
+  "python-multipart==0.0.20",
+  "pypdf==5.4.0",
+  "pypdfium2==4.30.0",
+  "Pillow==11.2.1",
+  "pytesseract==0.3.13",
+  "redis==5.2.1",
+  "SQLAlchemy==2.0.40",
+  "uvicorn[standard]==0.34.2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.3.5",
+  "pytest-cov==6.1.1",
+  "ruff==0.11.6",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+  "integration: requires a dedicated PostgreSQL test database",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]
+
+[tool.coverage.run]
+branch = true
+source = ["app"]

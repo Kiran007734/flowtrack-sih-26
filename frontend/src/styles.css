@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply border-slate-200; }
+  html { @apply bg-canvas; }
+  body { @apply m-0 min-w-[320px] bg-canvas font-sans text-ink antialiased; }
+  button, input, select, textarea { font: inherit; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-primary; }
+}
+
+@layer utilities {
+  .page-title { @apply text-2xl font-semibold tracking-tight text-slate-900; }
+  .page-description { @apply mt-1 text-sm text-muted; }
+}
